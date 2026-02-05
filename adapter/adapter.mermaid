@@ -1,0 +1,27 @@
+classDiagram
+    class ModernRobot {
+        <<interface>>
+        +moveForward()
+    }
+
+    class LegacyDrone {
+        +activateRotors()
+        +applyThrust()
+    }
+
+    class DroneAdapter {
+        -drone : LegacyDrone
+        +DroneAdapter(LegacyDrone drone)
+        +moveForward()
+    }
+
+    class ClientMain {
+       +main(args)
+    }
+
+    ModernRobot <|.. DroneAdapter : "Implements"
+    DroneAdapter o-- LegacyDrone : "Wraps"
+    ClientMain ..> ModernRobot : "Uses"
+
+    note for LegacyDrone "THE ADAPTEE"
+    note for DroneAdapter "THE ADAPTER: Translates moveForward() to activateRotors() + applyThrust()"

@@ -1,0 +1,44 @@
+classDiagram
+    class ChessStrategy {
+        <<interface>>
+        +executeMove()
+    }
+
+    class AggressiveStrategy {
+        +executeMove()
+    }
+
+    class DefensiveStrategy {
+        +executeMove()
+    }
+
+    class PromotionStrategy {
+        +executeMove()
+    }
+
+    class Pawn {
+        -currentStrategy : ChessStrategy
+        +setStrategy(ChessStrategy)
+        +move()
+    }
+
+    class ChessGame {
+        +main()
+    }
+
+    %% Relationships
+    %% The Pawn HAS A Strategy (Aggregation)
+    Pawn o-- ChessStrategy : "Has current strategy"
+
+    %% Strategies implement the interface
+    ChessStrategy <|.. AggressiveStrategy : "Implements"
+    ChessStrategy <|.. DefensiveStrategy : "Implements"
+    ChessStrategy <|.. PromotionStrategy : "Implements"
+
+    %% Client interaction
+    ChessGame ..> Pawn : "Controls"
+    ChessGame ..> ChessStrategy : "Creates specific strategy"
+
+    %% Notes
+    note for Pawn "CONTEXT: Calls currentStrategy.executeMove()"
+    note for ChessStrategy "INTERFACE: Defines the contract"

@@ -1,0 +1,28 @@
+classDiagram
+    class Worker {
+        <<interface>>
+        +performTask()
+    }
+
+    class JavaDeveloper {
+        +performTask()
+    }
+
+    class ProjectManager {
+        -delegate : Worker
+        +ProjectManager(Worker delegate)
+        +work()
+    }
+
+    class MainClient {
+        +main()
+    }
+
+    %% Relationships
+    Worker <|.. JavaDeveloper : "Implements"
+    ProjectManager o-- Worker : "Delegates To"
+    MainClient ..> ProjectManager : "Uses"
+
+    %% Labels identifying roles
+    note for ProjectManager "THE DELEGATOR: Calls delegate.performTask()"
+    note for JavaDeveloper "THE DELEGATE: Contains the logic"

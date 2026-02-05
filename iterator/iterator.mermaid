@@ -1,0 +1,40 @@
+classDiagram
+    class Iterator {
+        <<interface>>
+        +hasNext() boolean
+        +next() Object
+    }
+
+    class Container {
+        <<interface>>
+        +getIterator() Iterator
+    }
+
+    class NameRepository {
+        +names : String[]
+        +getIterator() Iterator
+    }
+
+    class NameIterator {
+        -index : int
+        +hasNext() boolean
+        +next() Object
+    }
+
+    class ClientMain {
+        +main(args)
+    }
+
+    %% RELATIONSHIPS
+    Container <|.. NameRepository : "Implements"
+    Iterator <|.. NameIterator : "Implements"
+
+    %% Changed +-- to *-- (Composition) to fix the error
+    NameRepository *-- NameIterator : "Inner Class"
+
+    %% Client Usage
+    ClientMain ..> NameRepository : "Uses"
+    ClientMain ..> Iterator : "Iterates via"
+
+    note for NameRepository "Stores data (names[])"
+    note for NameIterator "Traverses the array"

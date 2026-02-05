@@ -1,0 +1,63 @@
+classDiagram
+    %% 1. The Component Interface
+    class Shape {
+        <<interface>>
+        +draw()
+    }
+
+    %% 2. Concrete Components (The base objects)
+    class Rectangle {
+        +draw()
+    }
+    class Circle {
+        +draw()
+    }
+
+    %% 3. The Base Decorator
+    class ShapeDecorator {
+        <<abstract>>
+        #decoratedShape : Shape
+        +ShapeDecorator(Shape decoratedShape)
+        +draw()
+    }
+
+    %% 4. Concrete Decorators
+    class RedShapeDecorator {
+        +RedShapeDecorator(Shape decoratedShape)
+        +draw()
+        -setRedBorder(Shape decoratedShape)
+    }
+
+    class JumpDecorator {
+        +JumpDecorator(Shape decoratedShape)
+        +draw()
+    }
+
+    %% 5. The Client
+    class DecoratorPatternDemo {
+        +main(args)
+    }
+
+    %% --- RELATIONSHIPS ---
+
+    %% Real objects implement the interface
+    Shape <|.. Rectangle : "Implements"
+    Shape <|.. Circle : "Implements"
+    
+    %% The Decorator also implements the interface (so it can be treated as a Shape)
+    Shape <|.. ShapeDecorator : "Implements"
+
+    %% The Decorator HAS A Shape (Composition/Aggregation) - This is the key!
+    ShapeDecorator o-- Shape : "Wraps"
+
+    %% Concrete decorators extend the abstract decorator
+    ShapeDecorator <|-- RedShapeDecorator : "Extends"
+    ShapeDecorator <|-- JumpDecorator : "Extends"
+
+    %% Client dependencies
+    DecoratorPatternDemo ..> Shape : "Uses"
+    DecoratorPatternDemo ..> RedShapeDecorator : "Creates"
+
+    %% Notes
+    note for ShapeDecorator "Maintains a reference to a Shape object"
+    note for RedShapeDecorator "Adds behavior: setRedBorder()"

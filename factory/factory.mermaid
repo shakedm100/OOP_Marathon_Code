@@ -1,0 +1,50 @@
+classDiagram
+    %% 1. The Interface
+    class Shape {
+        <<interface>>
+        +draw()
+    }
+
+    %% 2. Concrete Classes implementing the interface
+    class Circle {
+        +draw()
+    }
+    class Rectangle {
+        +draw()
+    }
+    class Square {
+        +draw()
+    }
+
+    %% 3. The Factory Class
+    class ShapeFactory {
+        +getShape(String shapeType) : Shape
+    }
+
+    %% 4. The Client
+    class FactoryPatternDemo {
+        +main(args)
+    }
+
+    %% RELATIONSHIPS
+
+    %% Implementation
+    Shape <|.. Circle : "Implements"
+    Shape <|.. Rectangle : "Implements"
+    Shape <|.. Square : "Implements"
+
+    %% Factory creates the objects
+    ShapeFactory ..> Circle : "Creates"
+    ShapeFactory ..> Rectangle : "Creates"
+    ShapeFactory ..> Square : "Creates"
+
+    %% Factory Return Type
+    ShapeFactory ..> Shape : "Returns"
+
+    %% Client Usage
+    FactoryPatternDemo ..> ShapeFactory : "Asks for Shape"
+    FactoryPatternDemo ..> Shape : "Uses"
+
+    %% Notes
+    note for ShapeFactory "THE FACTORY: Encapsulates object creation logic"
+    note for FactoryPatternDemo "THE CLIENT: Doesn't know concrete classes, only Shape"

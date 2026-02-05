@@ -1,0 +1,21 @@
+classDiagram
+    class Gym {
+        -static instance : Gym
+        -members : List~String~
+        -Gym()
+        +static getInstance() Gym
+        +addMember(name)
+    }
+
+    class Client {
+        +main()
+    }
+
+    %% Relationship: The class holds a reference to itself
+    Gym --> Gym : "Holds single instance"
+    
+    %% Relationship: Client asks the class for the instance
+    Client ..> Gym : "Calls getInstance()"
+
+    note for Gym "LOGIC: If instance is null, create new Gym. Else return existing."
+    note for Gym "CONSTRUCTOR: Private to prevent external instantiation."

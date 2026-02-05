@@ -1,0 +1,52 @@
+classDiagram
+    %% 1. The Subsystem Interface
+    class Shape {
+        <<interface>>
+        +draw()
+    }
+
+    %% 2. The Subsystem Classes (Hidden from the client usually)
+    class Rectangle {
+        +draw()
+    }
+    class Square {
+        +draw()
+    }
+    class Circle {
+        +draw()
+    }
+
+    %% 3. The Facade (The simplified interface)
+    class ShapeMaker {
+        -circle : Shape
+        -rectangle : Shape
+        -square : Shape
+        +ShapeMaker()
+        +drawCircle()
+        +drawRectangle()
+        +drawSquare()
+    }
+
+    %% 4. The Client
+    class FacadeClient {
+        +main(args)
+    }
+
+    %% RELATIONSHIPS
+
+    %% Implementation of the interface
+    Shape <|.. Rectangle : "Implements"
+    Shape <|.. Square : "Implements"
+    Shape <|.. Circle : "Implements"
+
+    %% The Facade holds references to the subsystem classes (Composition)
+    ShapeMaker *-- Circle : "Creates & Uses"
+    ShapeMaker *-- Rectangle : "Creates & Uses"
+    ShapeMaker *-- Square : "Creates & Uses"
+
+    %% The Client only talks to the Facade
+    FacadeClient ..> ShapeMaker : "Uses"
+
+    %% Notes for clarity
+    note for ShapeMaker "THE FACADE: Hides the initialization logic"
+    note for FacadeClient "THE CLIENT: Only knows about ShapeMaker"

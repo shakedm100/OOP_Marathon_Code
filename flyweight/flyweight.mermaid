@@ -1,0 +1,58 @@
+classDiagram
+    %% 1. The Concrete Flyweight (Shared / Intrinsic)
+    class TreeType {
+        -name : String
+        -color : Color
+        -otherTreeData : String
+        +TreeType(name, color, data)
+        +draw(x, y)
+    }
+
+    %% 2. The Flyweight Factory
+    class TreeFactory {
+        -treeTypes : Map~String, TreeType~
+        +getTreeType(name, color, data)$ TreeType
+    }
+
+    %% 3. The Context (Unique / Extrinsic)
+    class Tree {
+        -x : int
+        -y : int
+        -type : TreeType
+        +Tree(x, y, type)
+        +draw()
+    }
+
+    %% 4. The Client
+    class Forest {
+        -trees : List~Tree~
+        +plantTree(x, y, name, color, data)
+        +paint()
+    }
+
+    %% 5. Main Execution
+    class FlyweightDemo {
+        +main(args)
+    }
+
+    %% --- Relationships ---
+
+    %% Forest contains many Trees
+    Forest o-- Tree : "Contains List of"
+
+    %% Forest asks Factory for the Flyweight
+    Forest ..> TreeFactory : "Requests Flyweight"
+
+    %% Tree holds a reference to the Flyweight (The connection between Intrinsic & Extrinsic)
+    Tree --> TreeType : "Refers to shared"
+
+    %% Factory manages the Flyweights
+    TreeFactory o-- TreeType : "Caches/Creates"
+
+    %% Demo uses Forest
+    FlyweightDemo ..> Forest : "Uses"
+
+    %% --- Explanatory Notes ---
+    note for TreeType "INTRINSIC STATE:\nShared data (Texture, Color)\nStored once in memory."
+    note for Tree "EXTRINSIC STATE:\nUnique data (x, y)\nStored for every tree."
+    note for TreeFactory "THE CACHE:\nReturns existing TreeType\nif available."

@@ -1,0 +1,53 @@
+classDiagram
+    %% 1. The Interfaces
+    class Subject {
+        <<interface>>
+        +attach(Observer)
+        +detach(Observer)
+        +notifyObservers()
+    }
+
+    class Observer {
+        <<interface>>
+        +update(float temp)
+    }
+
+    %% 2. Concrete Classes
+    class WeatherStation {
+        -observers : List~Observer~
+        -temperature : float
+        +setTemperature(float)
+        +notifyObservers()
+    }
+
+    class SmartFan {
+        +update(float temp)
+    }
+
+    class WallDisplay {
+        +update(float temp)
+    }
+
+    %% 3. The Client
+    class SmartHomeDemo {
+        +main(args)
+    }
+
+    %% --- RELATIONSHIPS ---
+
+    %% Implementation
+    Subject <|.. WeatherStation : "Implements"
+    Observer <|.. SmartFan : "Implements"
+    Observer <|.. WallDisplay : "Implements"
+
+    %% The Core Relationship: Subject HAS Observers
+    %% We use Aggregation (o--) because Observers exist independently of the Subject
+    WeatherStation o-- Observer : "Notifies List of"
+
+    %% Client Usage
+    SmartHomeDemo ..> WeatherStation : "Updates State"
+    SmartHomeDemo ..> Observer : "Creates"
+
+    %% Notes
+    note for WeatherStation "THE SUBJECT:\nIterates through list\ncalls observer.update()"
+    note for SmartFan "THE OBSERVER:\nReacts to update()"

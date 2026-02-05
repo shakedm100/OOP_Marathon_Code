@@ -1,0 +1,65 @@
+classDiagram
+    %% 1. The Element Interface
+    class ItemElement {
+        <<interface>>
+        +accept(ShoppingCartVisitor visitor) int
+    }
+
+    %% 2. Concrete Elements
+    class Book {
+        -price : int
+        -isbnNumber : String
+        +Book(price, isbn)
+        +getPrice() int
+        +getIsbnNumber() String
+        +accept(ShoppingCartVisitor visitor) int
+    }
+
+    class Fruit {
+        -pricePerKg : int
+        -weight : int
+        -name : String
+        +Fruit(price, weight, name)
+        +getPricePerKg() int
+        +getWeight() int
+        +getName() String
+        +accept(ShoppingCartVisitor visitor) int
+    }
+
+    %% 3. The Visitor Interface
+    class ShoppingCartVisitor {
+        <<interface>>
+        +visit(Book book) int
+        +visit(Fruit fruit) int
+    }
+
+    %% 4. Concrete Visitor
+    class ShoppingCartVisitorImpl {
+        +visit(Book book) int
+        +visit(Fruit fruit) int
+    }
+
+    %% 5. Client
+    class ClientMain {
+        +main(args)
+    }
+
+    %% RELATIONSHIPS
+    ItemElement <|.. Book : "Implements"
+    ItemElement <|.. Fruit : "Implements"
+
+    ShoppingCartVisitor <|.. ShoppingCartVisitorImpl : "Implements"
+
+    %% The Double Dispatch Dependencies
+    %% The Elements depend on the Visitor Interface (for the accept method argument)
+    Book ..> ShoppingCartVisitor : "Uses"
+    Fruit ..> ShoppingCartVisitor : "Uses"
+
+    %% The Visitor depends on the Concrete Elements (for the visit method arguments)
+    ShoppingCartVisitor ..> Book : "Visits"
+    ShoppingCartVisitor ..> Fruit : "Visits"
+
+    ClientMain ..> ItemElement : "Uses"
+    ClientMain ..> ShoppingCartVisitor : "Creates"
+
+    note for Book "accept(v) calls v.visit(this)\n(Double Dispatch)"

@@ -1,0 +1,47 @@
+classDiagram
+    %% 1. The Component Interface
+    class IParkingComponent {
+        <<interface>>
+        +showDetails(indent)
+    }
+
+    %% 2. The Base Composite logic
+    class ParkingComposite {
+        -components : List~IParkingComponent~
+        +add(IParkingComponent)
+        +showDetails(indent)
+    }
+
+    %% 3. Concrete Composites
+    class ParkingFloor {
+    }
+    class ParkingArea {
+    }
+
+    %% 4. Leafs (End nodes)
+    class ParkingSpot {
+        -id : String
+        +showDetails(indent)
+    }
+    class Passage {
+        -name : String
+        +showDetails(indent)
+    }
+
+    %% Relationships
+    %% All implement the Component interface
+    IParkingComponent <|.. ParkingComposite : "Implements"
+    IParkingComponent <|.. ParkingSpot : "Implements"
+    IParkingComponent <|.. Passage : "Implements"
+
+    %% Inheritance for specific composites
+    ParkingComposite <|-- ParkingFloor : "Inherits"
+    ParkingComposite <|-- ParkingArea : "Inherits"
+
+    %% The Critical Composite Relationship: A composite contains Components
+    ParkingComposite o-- IParkingComponent : "Contains List of"
+
+    %% Notes
+    note for ParkingSpot "LEAF: Cannot contain others"
+    note for ParkingFloor "COMPOSITE: Contains Areas & Passages"
+    note for ParkingComposite "Maintains the list of children"
