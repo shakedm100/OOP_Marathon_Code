@@ -1,0 +1,70 @@
+classDiagram
+    %% Composite Pattern
+    class ForestComponent {
+        <<interface>>
+        +accept(ForestVisitor visitor)
+    }
+
+    class Region {
+        -List~ForestComponent~ children
+        -String name
+        +add(ForestComponent component)
+        +remove(ForestComponent component)
+        +getChildren() List~ForestComponent~
+        +accept(ForestVisitor visitor)
+    }
+
+    class Tree {
+        -int x
+        -int y
+        -int hp
+        -boolean isBurning
+        -TreeType type
+        +accept(ForestVisitor visitor)
+        +getDamageValue() double
+        +getDetails() String
+    }
+
+    %% Flyweight Pattern
+    class TreeType {
+        -String botanicalName
+        -String texture3DModel
+        -double burnRate
+        +draw(int x, int y)
+    }
+
+    class TreeFactory {
+        -Map~String, TreeType~ treeTypes
+        +getTreeType(name, texture, burnRate) TreeType
+    }
+
+    %% Visitor Pattern
+    class ForestVisitor {
+        <<interface>>
+        +visit(Tree tree)
+        +visit(Region region)
+    }
+
+    class DamageCalculatorVisitor {
+        -double totalDamage
+        +visit(Tree tree)
+        +visit(Region region)
+        +getTotalDamage() double
+    }
+
+    class JsonExportVisitor {
+        -StringBuilder json
+        +visit(Tree tree)
+        +visit(Region region)
+        +getJson() String
+    }
+
+    %% Relationships
+    ForestComponent <|.. Region
+    ForestComponent <|.. Tree
+    Region o-- ForestComponent : contains
+    Tree --> TreeType : uses (Flyweight)
+    TreeFactory --> TreeType : creates/manages
+    ForestVisitor <.. ForestComponent : uses
+    ForestVisitor <|.. DamageCalculatorVisitor
+    ForestVisitor <|.. JsonExportVisitor
